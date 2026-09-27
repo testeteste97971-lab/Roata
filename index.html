@@ -7,175 +7,210 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            background-image: radial-gradient(circle at 50% 0%, #2a2a2a 0%, #1a1a1a 80%);
+            color: #f3f4f6;
             user-select: none;
             -webkit-user-select: none;
+            overflow-x: hidden;
         }
 
-        /* Glassmorphism card styles */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(38, 38, 38, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Wheel Outer Shadow Glow */
         .wheel-glow {
-            filter: drop-shadow(0 0 35px rgba(59, 130, 246, 0.25));
+            filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.15));
         }
 
-        /* Modal bounce animation */
         @keyframes modalPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            70% { transform: scale(1.05); }
+            0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .animate-modal {
-            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #4b5563;
+            border-radius: 0.25rem;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .custom-checkbox:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Custom Scrollbar for Management Modal */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between p-4 overflow-x-hidden">
+<body class="min-h-screen flex flex-col items-center justify-between p-4 sm:p-6">
 
-    <!-- Header Section -->
-    <header class="w-full max-w-2xl text-center pt-2 pb-4">
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 uppercase">
+    <header class="w-full max-w-3xl text-center pt-2 pb-6">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
             Clasa a X-a MI
         </h1>
     </header>
 
-    <!-- Main Interactive Area -->
-    <main class="flex flex-col items-center justify-center w-full max-w-xl flex-1 relative my-auto">
+    <main class="flex flex-col items-center justify-center w-full max-w-xl flex-1 relative">
         
         <!-- Wheel Container -->
-        <div class="relative w-full max-w-[420px] sm:max-w-[480px] aspect-square wheel-glow flex items-center justify-center">
+        <div class="relative w-full max-w-[400px] sm:max-w-[480px] aspect-square wheel-glow flex items-center justify-center mb-10">
             
-            <!-- Top Pointer / Indicator -->
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none filter drop-shadow(0 6px 8px rgba(0,0,0,0.6))">
-                <svg width="42" height="48" viewBox="0 0 36 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 42L2.41154 15L33.5885 15L18 42Z" fill="#EF4444"/>
-                    <path d="M18 36L6 15L30 15L18 36Z" fill="#F87171"/>
-                    <circle cx="18" cy="12" r="8" fill="#DC2626"/>
-                    <circle cx="18" cy="12" r="4" fill="#FEF2F2"/>
+            <!-- Top Pointer -->
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none drop-shadow-xl">
+                <svg width="40" height="48" viewBox="0 0 36 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 48L2 18L34 18L18 48Z" fill="#3b82f6"/>
+                    <path d="M18 40L7 18L29 18L18 40Z" fill="#60a5fa"/>
+                    <circle cx="18" cy="14" r="10" fill="#2563eb"/>
+                    <circle cx="18" cy="14" r="4" fill="#ffffff"/>
                 </svg>
             </div>
 
-            <!-- Canvas Wheel -->
+            <!-- Canvas -->
             <canvas id="wheelCanvas" width="900" height="900" class="w-full h-full rounded-full cursor-pointer transition-transform ease-out"></canvas>
 
-            <!-- Center Cap / Hub -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-800 to-slate-950 rounded-full z-20 border-4 border-slate-700 shadow-2xl flex items-center justify-center pointer-events-none">
-                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500 shadow-inner border-2 border-slate-900"></div>
+            <!-- Center Cap -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 bg-[#1a1a1a] rounded-full z-20 border-4 border-[#2a2a2a] shadow-2xl flex items-center justify-center pointer-events-none">
+                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500 shadow-inner"></div>
             </div>
         </div>
 
-        <!-- Controls -->
-        <div class="mt-8 flex flex-col items-center gap-3 w-full sm:w-auto">
-            <button id="spinBtn" class="w-full sm:w-72 py-4 px-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 active:scale-95 text-white font-extrabold text-xl tracking-widest uppercase rounded-2xl shadow-xl hover:shadow-blue-500/30 transition-all duration-200 border border-blue-400/30">
+        <!-- Action Controls -->
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mt-4">
+            <button id="spinBtn" class="w-full sm:w-64 py-4 px-8 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 active:scale-95 text-white font-bold text-xl rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-200">
                 ÎNVÂRTE ROATA
+            </button>
+            <button id="openManageBtn" class="w-full sm:w-auto py-4 px-6 bg-[#2a2a2a] hover:bg-[#333333] active:bg-[#222222] text-gray-300 hover:text-white font-semibold rounded-xl border border-[#444] transition-all duration-200 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+                Gestionează Elevii
             </button>
         </div>
     </main>
 
+    <!-- Management Modal -->
+    <div id="manageModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl max-w-md w-full flex flex-col max-h-[85vh] transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">Elevi pe Roată</h2>
+                <button id="closeManageCross" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex justify-between mb-4 pb-4 border-b border-gray-700/50">
+                <button id="selectAllBtn" class="text-sm text-blue-400 hover:text-blue-300 font-medium">Selectează Toți</button>
+                <button id="deselectAllBtn" class="text-sm text-gray-400 hover:text-gray-300 font-medium">Deselectează Toți</button>
+            </div>
+
+            <!-- Student List Container -->
+            <div id="studentListContainer" class="flex-1 overflow-y-auto pr-2 space-y-2 mb-6">
+                <!-- Checkboxes dynamically generated here -->
+            </div>
+
+            <button id="saveManageBtn" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors">
+                Salvează și Actualizează
+            </button>
+        </div>
+    </div>
+
     <!-- Winner Modal Overlay -->
-    <div id="winnerModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="winnerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <canvas id="confettiCanvas" class="absolute inset-0 pointer-events-none z-10 w-full h-full"></canvas>
         
-        <div class="glass-panel p-8 sm:p-10 rounded-3xl max-w-md w-full text-center relative z-20 border border-slate-700/60 shadow-2xl animate-modal flex flex-col items-center">
-            
-            <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-4 border border-blue-500/30">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+        <div class="glass-panel p-8 sm:p-10 rounded-2xl max-w-md w-full text-center relative z-20 animate-modal shadow-2xl">
+            <div class="mx-auto w-16 h-16 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mb-4 border border-blue-500/30">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
 
-            <p class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-2">Elevul selectat este</p>
-            
-            <h2 id="winnerName" class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 mb-8 leading-tight">
+            <p class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-2">A fost selectat</p>
+            <h2 id="winnerName" class="text-3xl font-black text-white mb-8 leading-tight">
                 -
             </h2>
 
-            <button id="respinBtn" class="w-full py-3.5 px-6 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-white font-bold rounded-xl border border-slate-600 transition-all duration-150 shadow-lg">
-                RE-SPIN
+            <button id="respinBtn" class="w-full py-3.5 px-6 bg-[#2a2a2a] hover:bg-[#333] active:bg-[#1a1a1a] text-white font-bold rounded-xl border border-[#444] transition-all shadow-lg">
+                ÎNCHIDE
             </button>
         </div>
     </div>
 
     <script>
-        // Exact list of 24 students
-        const STUDENTS = [
-            "AVRĂMUȚ PATRIC LUCA",
-            "BRÂNZEI LORENA MARIA",
-            "CIOBANU AIDA GABRIELA",
-            "CONSTANTIN ADRIANA SARA ELENA",
-            "DINCĂ EMILIAN-ANDREI",
-            "DRAGOȘ ALEXANDRU-LUCA",
-            "DRINCA ANAMARIA-IONELA",
-            "DRĂGILĂ SANDRA-ELENA",
-            "GACICĂ DENIS IONUȚ",
-            "HERAC ROBERT-PETRU",
-            "HÎNCU ADAM",
-            "IROFTE ANDREEA",
-            "IROFTE MARIA",
-            "JĂȚA DARIA ANA-MARIA",
-            "MĂGUREAN MARIA ELENA",
-            "MANOLE FILIP NICUȘOR",
-            "MOȘULEȚ MARTA",
-            "NERGHES MĂDĂLINA IOANA",
-            "NICĂȘIN CLAUDIA-MARIA",
-            "PÂRVU DARIA ROBERTA",
-            "PEPTAN BIANCA MĂDĂLINA",
-            "POP ALESSANDRO",
-            "ROMAN ROBERTA MARIA",
-            "STOICA SANDRA-ANDREEA"
+        const RAW_STUDENTS = [
+            "AVRĂMUȚ PATRIC LUCA", "BRÂNZEI LORENA MARIA", "CIOBANU AIDA GABRIELA",
+            "CONSTANTIN ADRIANA SARA ELENA", "DINCĂ EMILIAN-ANDREI", "DRAGOȘ ALEXANDRU-LUCA",
+            "DRĂGILĂ SANDRA-ELENA", "DRINCA ANAMARIA-IONELA", "GACICĂ DENIS IONUȚ",
+            "HERAC ROBERT-PETRU", "HÎNCU ADAM", "IROFTE ANDREEA", "IROFTE MARIA",
+            "JĂȚA DARIA ANA-MARIA", "MĂGUREAN MARIA ELENA", "MANOLE FILIP NICUȘOR",
+            "MOȘULEȚ MARTA", "NERGHES MĂDĂLINA IOANA", "NICĂȘIN CLAUDIA-MARIA",
+            "PÂRVU DARIA ROBERTA", "PEPTAN BIANCA MĂDĂLINA", "POP ALESSANDRO",
+            "ROMAN ROBERTA MARIA", "STOICA SANDRA-ANDREEA"
         ];
 
-        // Rigging Configurations
-        const TOP_FAVORITES = [
-            "POP ALESSANDRO",
-            "GACICĂ DENIS IONUȚ",
-            "PÂRVU DARIA ROBERTA",
-            "CONSTANTIN ADRIANA SARA ELENA"
-        ];
-
-        const EXCLUDED_STUDENTS = [
+        const RIGGED_STUDENTS = [
             "DRAGOȘ ALEXANDRU-LUCA",
             "DRINCA ANAMARIA-IONELA",
             "PEPTAN BIANCA MĂDĂLINA",
             "MOȘULEȚ MARTA"
         ];
 
-        // Pool-ul normal cu cei 20 de elevi (fara cei 4 exclusi)
-        const NORMAL_POOL = STUDENTS.filter(name => !EXCLUDED_STUDENTS.includes(name));
+        // Master state
+        let studentsData = RAW_STUDENTS.map(name => ({
+            name: name,
+            active: true,
+            isRigged: RIGGED_STUDENTS.includes(name)
+        }));
+
+        let activeStudentsList = [];
 
         // State Variables
-        let currentRotation = 0; // in degrees
+        let currentRotation = 0;
         let isSpinning = false;
         let animationReqId = null;
 
-        // Anti-detection initial queue per device/session:
-        // We shuffle the order of the top 4 favorites locally for the initial spins.
-        let sessionFavoritesQueue = [];
-
-        function initializeSessionQueue() {
-            // Fisher-Yates shuffle for initial queue
-            const shuffled = [...TOP_FAVORITES];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            sessionFavoritesQueue = shuffled;
-        }
-
-        initializeSessionQueue();
-
-        // Canvas & DOM References
+        // DOM Elements
         const canvas = document.getElementById('wheelCanvas');
         const ctx = canvas.getContext('2d');
         const spinBtn = document.getElementById('spinBtn');
@@ -183,21 +218,23 @@
         const winnerModal = document.getElementById('winnerModal');
         const winnerNameEl = document.getElementById('winnerName');
         const confettiCanvas = document.getElementById('confettiCanvas');
+        
+        // Manage Modal Elements
+        const manageModal = document.getElementById('manageModal');
+        const openManageBtn = document.getElementById('openManageBtn');
+        const closeManageCross = document.getElementById('closeManageCross');
+        const saveManageBtn = document.getElementById('saveManageBtn');
+        const studentListContainer = document.getElementById('studentListContainer');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+        const deselectAllBtn = document.getElementById('deselectAllBtn');
 
-        const numSlices = STUDENTS.length;
-        const sliceAngle = 360 / numSlices; // 15 degrees per slice
-
-        // Web Audio API Context for sound effects
         let audioCtx = null;
-
         function initAudio() {
             if (!audioCtx) {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
             }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         function playTickSound() {
@@ -205,177 +242,171 @@
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(600 + Math.random() * 150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.04);
-                
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-                
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.04);
+                osc.stop(audioCtx.currentTime + 0.03);
             } catch (e) {}
         }
 
-        function playVictorySound() {
-            if (!audioCtx) return;
-            try {
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-                notes.forEach((freq, idx) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    
-                    osc.type = 'sine';
-                    osc.frequency.value = freq;
-                    
-                    const startTime = audioCtx.currentTime + (idx * 0.1);
-                    gain.gain.setValueAtTime(0, startTime);
-                    gain.gain.linearRampToValueAtTime(0.25, startTime + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.5);
-                    
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    
-                    osc.start(startTime);
-                    osc.stop(startTime + 0.5);
-                });
-            } catch (e) {}
-        }
+        // Color palette for slices (Dark / Professional)
+        const palette = ['#1e293b', '#262626', '#172554', '#262626', '#312e81', '#262626'];
 
-        // Premium Palette for 24 slices
-        const sliceColors = [
-            '#1e293b', '#0f172a', '#1e1b4b', '#0f172a',
-            '#172554', '#0f172a', '#1e293b', '#0f172a',
-            '#311042', '#0f172a', '#1e293b', '#0f172a',
-            '#1e1b4b', '#0f172a', '#172554', '#0f172a',
-            '#1e293b', '#0f172a', '#311042', '#0f172a',
-            '#172554', '#0f172a', '#1e293b', '#0f172a'
-        ];
+        function updateActiveList() {
+            activeStudentsList = studentsData.filter(s => s.active);
+            drawWheel();
+        }
 
         function drawWheel() {
             const width = canvas.width;
             const height = canvas.height;
             const centerX = width / 2;
             const centerY = height / 2;
-            const outerRadius = width / 2 - 10;
+            const outerRadius = width / 2 - 15;
 
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Slices
-            for (let i = 0; i < numSlices; i++) {
-                const startAngleRad = (i * sliceAngle) * (Math.PI / 180);
-                const endAngleRad = ((i + 1) * sliceAngle) * (Math.PI / 180);
+            if (activeStudentsList.length === 0) {
+                // Empty state
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+                ctx.fillStyle = '#1e1e1e';
+                ctx.fill();
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#333';
+                ctx.stroke();
+                
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#666';
+                ctx.font = '600 30px Inter';
+                ctx.fillText('Niciun elev selectat', centerX, centerY + 100);
+                return;
+            }
 
+            const numSlices = activeStudentsList.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            for (let i = 0; i < numSlices; i++) {
+                const startAngle = i * sliceAngle;
+                const endAngle = (i + 1) * sliceAngle;
+
+                // Draw Slice
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, outerRadius, startAngleRad, endAngleRad);
+                ctx.arc(centerX, centerY, outerRadius, startAngle, endAngle);
                 ctx.closePath();
 
-                ctx.fillStyle = sliceColors[i % sliceColors.length];
+                ctx.fillStyle = palette[i % palette.length];
                 ctx.fill();
 
-                // Slice border divider
+                // Separator Lines
                 ctx.lineWidth = 2;
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
                 ctx.stroke();
 
                 // Draw Text
                 ctx.save();
                 ctx.translate(centerX, centerY);
-                const midAngleRad = startAngleRad + (endAngleRad - startAngleRad) / 2;
-                ctx.rotate(midAngleRad);
+                const midAngle = startAngle + sliceAngle / 2;
+                ctx.rotate(midAngle);
 
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#f1f5f9';
-                ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
+                ctx.fillStyle = '#e5e7eb'; // Light gray text
+                
+                // Adjust font size based on active students count
+                let fontSize = numSlices > 20 ? 18 : numSlices > 10 ? 22 : 28;
+                ctx.font = `600 ${fontSize}px "Inter", sans-serif`;
 
-                // Truncate long names slightly if needed for wheel aesthetics
-                let nameToDisplay = STUDENTS[i];
-                if (nameToDisplay.length > 25) {
-                    nameToDisplay = nameToDisplay.substring(0, 23) + '...';
-                }
+                let name = activeStudentsList[i].name;
+                if (name.length > 22) name = name.substring(0, 20) + '...';
 
-                ctx.fillText(nameToDisplay, outerRadius - 35, 0);
+                ctx.fillText(name, outerRadius - 40, 0);
                 ctx.restore();
             }
 
-            // Outer Ring Styling
+            // Outer Border
             ctx.beginPath();
             ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
-            ctx.lineWidth = 12;
-            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 14;
+            ctx.strokeStyle = '#262626';
+            ctx.stroke();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#404040';
             ctx.stroke();
         }
 
-        // Initialize wheel render
-        drawWheel();
+        function pickTargetStudent() {
+            if (activeStudentsList.length === 0) return null;
 
-        function pickTargetStudentIndex() {
-            // Phase 1: Local Session Queue (for initial spins on each session)
-            // Aici se dau favoriții amestecați inițial pentru a ascunde frauda
-            if (sessionFavoritesQueue.length > 0) {
-                const nextFavoriteName = sessionFavoritesQueue.shift();
-                return STUDENTS.indexOf(nextFavoriteName);
+            const activeNormal = activeStudentsList.filter(s => !s.isRigged);
+            const activeRigged = activeStudentsList.filter(s => s.isRigged);
+
+            let chosenStudent = null;
+
+            // Logic: Rigged students have a nearly impossible chance (0.00000001 out of 1.0)
+            if (activeRigged.length > 0 && Math.random() < 0.00000001) {
+                // Extremely rare trigger
+                const randIndex = Math.floor(Math.random() * activeRigged.length);
+                chosenStudent = activeRigged[randIndex];
+            } else if (activeNormal.length > 0) {
+                // Pure Random among the rest
+                const randIndex = Math.floor(Math.random() * activeNormal.length);
+                chosenStudent = activeNormal[randIndex];
+            } else if (activeRigged.length > 0) {
+                // Edge case: ONLY rigged students are checked in the management tab
+                const randIndex = Math.floor(Math.random() * activeRigged.length);
+                chosenStudent = activeRigged[randIndex];
             }
 
-            // Phase 2: Distribuție Normală (după ce s-au epuizat favoriții inițiali)
-            const rand = Math.random() * 100; // Generează un număr între 0 și 100
-
-            if (rand < 0.001) {
-                // 0.001% șansă extrem de rară să pice unul dintre cei 4 excluși (1 la 100.000 rotiri)
-                const pick = Math.floor(Math.random() * EXCLUDED_STUDENTS.length);
-                return STUDENTS.indexOf(EXCLUDED_STUDENTS[pick]);
-            } else {
-                // 99.999% șansă să pice oricare alt elev din restul clasei, toți având șanse egale acum
-                const pick = Math.floor(Math.random() * NORMAL_POOL.length);
-                return STUDENTS.indexOf(NORMAL_POOL[pick]);
-            }
+            return chosenStudent;
         }
 
         function spin() {
-            if (isSpinning) return;
+            if (isSpinning || activeStudentsList.length === 0) return;
             initAudio();
 
             isSpinning = true;
             spinBtn.disabled = true;
+            spinBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            const targetIndex = pickTargetStudentIndex();
-            const targetStudentName = STUDENTS[targetIndex];
+            const targetStudent = pickTargetStudent();
+            if (!targetStudent) return; // Should not happen
 
-            // Calculations for rotation stop:
-            // Pointer is at Top (12 o'clock) = 270 degrees in Canvas standard coordinate system.
-            // Slice i center angle = (i + 0.5) * sliceAngle
-            // To align slice i center with 270deg:
-            // ( (i + 0.5) * sliceAngle + finalAngle ) % 360 = 270
-            const sliceCenterAngle = (targetIndex + 0.5) * sliceAngle;
+            // Find index of chosen student in the rendered active list
+            const targetIndex = activeStudentsList.findIndex(s => s.name === targetStudent.name);
+            const numSlices = activeStudentsList.length;
+            const sliceAngleDeg = 360 / numSlices;
             
-            // Calculate target offset angle (0 to 360)
+            // Pointer is at Top (270 degrees in canvas coordinate system)
+            const sliceCenterAngle = (targetIndex + 0.5) * sliceAngleDeg;
+            
             let desiredAngleOnWheel = (270 - sliceCenterAngle) % 360;
             if (desiredAngleOnWheel < 0) desiredAngleOnWheel += 360;
 
-            // Current modulo rotation
             const currentMod = currentRotation % 360;
             let forwardDiff = desiredAngleOnWheel - currentMod;
             if (forwardDiff < 0) forwardDiff += 360;
 
-            // Add random slight variation inside slice (-40% to +40% of slice width) to look realistic
-            const randomInnerSliceOffset = (Math.random() - 0.5) * (sliceAngle * 0.7);
+            // Add random offset inside slice to look organic
+            const randomOffset = (Math.random() - 0.5) * (sliceAngleDeg * 0.7);
 
-            // Add 8 full rotations (8 * 360 = 2880 deg)
-            const totalSpinDegrees = 2880 + forwardDiff + randomInnerSliceOffset;
+            // 10 Full rotations + calculated difference
+            const totalSpinDegrees = 3600 + forwardDiff + randomOffset;
             const startRotation = currentRotation;
             const endRotation = currentRotation + totalSpinDegrees;
 
-            const duration = 6500; // milliseconds
+            const duration = 7000;
             let startTime = null;
-            let lastTickSliceIndex = -1;
+            let lastTickSlice = -1;
 
-            // Quartic Ease-Out animation curve
+            // Ease-out function
             function easeOutQuart(t) {
                 return 1 - Math.pow(1 - t, 4);
             }
@@ -384,37 +415,83 @@
                 if (!startTime) startTime = timestamp;
                 const elapsed = timestamp - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const easedProgress = easeOutQuart(progress);
+                const eased = easeOutQuart(progress);
 
-                currentRotation = startRotation + (endRotation - startRotation) * easedProgress;
-
-                // Update canvas rotation visually
+                currentRotation = startRotation + (endRotation - startRotation) * eased;
                 canvas.style.transform = `rotate(${currentRotation}deg)`;
 
-                // Calculate current slice under pointer for tick sound effect
-                // Pointer is at 270 deg relative to canvas angle
+                // Calculate current tick for audio
                 const currentWheelAngle = (270 - (currentRotation % 360) + 360) % 360;
-                const currentSliceIndex = Math.floor(currentWheelAngle / sliceAngle);
+                const currentSliceIndex = Math.floor(currentWheelAngle / sliceAngleDeg);
 
-                if (currentSliceIndex !== lastTickSliceIndex) {
+                if (currentSliceIndex !== lastTickSlice) {
                     playTickSound();
-                    lastTickSliceIndex = currentSliceIndex;
+                    lastTickSlice = currentSliceIndex;
                 }
 
                 if (progress < 1) {
                     animationReqId = requestAnimationFrame(animate);
                 } else {
-                    // Spin finished
                     isSpinning = false;
-                    setTimeout(() => {
-                        showWinnerModal(targetStudentName);
-                    }, 400);
+                    setTimeout(() => showWinnerModal(targetStudent.name), 400);
                 }
             }
 
             animationReqId = requestAnimationFrame(animate);
         }
 
+        // Management Modal Logic
+        function renderManagementList() {
+            studentListContainer.innerHTML = '';
+            studentsData.forEach((student, index) => {
+                const row = document.createElement('label');
+                row.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border border-transparent hover:border-white/10';
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'text-gray-200 font-medium select-none';
+                nameSpan.textContent = student.name;
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'custom-checkbox';
+                checkbox.checked = student.active;
+                checkbox.dataset.index = index;
+
+                row.appendChild(nameSpan);
+                row.appendChild(checkbox);
+                studentListContainer.appendChild(row);
+            });
+        }
+
+        function openManagement() {
+            if (isSpinning) return;
+            renderManagementList();
+            manageModal.classList.remove('hidden');
+            // Trigger reflow for fade in
+            void manageModal.offsetWidth;
+            manageModal.classList.remove('opacity-0');
+            manageModal.firstElementChild.classList.remove('scale-95');
+        }
+
+        function closeManagement() {
+            manageModal.classList.add('opacity-0');
+            manageModal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                manageModal.classList.add('hidden');
+            }, 300);
+        }
+
+        function saveManagement() {
+            const checkboxes = studentListContainer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                const idx = cb.dataset.index;
+                studentsData[idx].active = cb.checked;
+            });
+            updateActiveList();
+            closeManagement();
+        }
+
+        // Confetti Logic
         let confettiParticles = [];
         let confettiAnimationId = null;
 
@@ -422,36 +499,33 @@
             const ctxC = confettiCanvas.getContext('2d');
             confettiCanvas.width = confettiCanvas.clientWidth;
             confettiCanvas.height = confettiCanvas.clientHeight;
-
             confettiParticles = [];
-            const colors = ['#60a5fa', '#818cf8', '#a78bfa', '#f43f5e', '#fbbf24', '#34d399'];
+            const colors = ['#3b82f6', '#60a5fa', '#93c5fd', '#ffffff', '#cbd5e1'];
 
-            for (let i = 0; i < 90; i++) {
+            for (let i = 0; i < 100; i++) {
                 confettiParticles.push({
                     x: confettiCanvas.width / 2,
                     y: confettiCanvas.height / 2,
-                    vx: (Math.random() - 0.5) * 16,
-                    vy: (Math.random() - 0.7) * 18,
-                    size: Math.random() * 8 + 4,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.8) * 20,
+                    size: Math.random() * 6 + 4,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     rotation: Math.random() * 360,
                     vRot: (Math.random() - 0.5) * 10,
-                    gravity: 0.35,
+                    gravity: 0.4,
                     opacity: 1
                 });
             }
 
-            function renderConfetti() {
+            function render() {
                 ctxC.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
                 let alive = false;
-
                 confettiParticles.forEach(p => {
                     p.x += p.vx;
                     p.y += p.vy;
                     p.vy += p.gravity;
                     p.rotation += p.vRot;
-                    p.opacity -= 0.008;
-
+                    p.opacity -= 0.006;
                     if (p.opacity > 0) {
                         alive = true;
                         ctxC.save();
@@ -459,22 +533,17 @@
                         ctxC.rotate((p.rotation * Math.PI) / 180);
                         ctxC.globalAlpha = Math.max(p.opacity, 0);
                         ctxC.fillStyle = p.color;
-                        ctxC.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                        ctxC.fillRect(-p.size/2, -p.size/2, p.size, p.size);
                         ctxC.restore();
                     }
                 });
-
-                if (alive) {
-                    confettiAnimationId = requestAnimationFrame(renderConfetti);
-                }
+                if (alive) confettiAnimationId = requestAnimationFrame(render);
             }
-
             if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
-            renderConfetti();
+            render();
         }
 
         function showWinnerModal(name) {
-            playVictorySound();
             winnerNameEl.textContent = name;
             winnerModal.classList.remove('hidden');
             createConfetti();
@@ -483,19 +552,36 @@
         function hideWinnerModal() {
             winnerModal.classList.add('hidden');
             spinBtn.disabled = false;
+            spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
         // Event Listeners
         spinBtn.addEventListener('click', spin);
         respinBtn.addEventListener('click', hideWinnerModal);
+        
+        openManageBtn.addEventListener('click', openManagement);
+        closeManageCross.addEventListener('click', closeManagement);
+        saveManageBtn.addEventListener('click', saveManagement);
 
-        // Window Resize Handling for Confetti Canvas
+        selectAllBtn.addEventListener('click', () => {
+            const checkboxes = studentListContainer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = true);
+        });
+
+        deselectAllBtn.addEventListener('click', () => {
+            const checkboxes = studentListContainer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+        });
+
         window.addEventListener('resize', () => {
             if (!winnerModal.classList.contains('hidden')) {
                 confettiCanvas.width = confettiCanvas.clientWidth;
                 confettiCanvas.height = confettiCanvas.clientHeight;
             }
         });
+
+        // Initialize Wheel on Load
+        updateActiveList();
     </script>
 </body>
 </html>
